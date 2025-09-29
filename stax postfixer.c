@@ -62,21 +62,22 @@ int inputprec(char symbol){
         default: return 7;
     }
 }
-
+//the basic idea here is that isalnum() helps to ask and stabalize the slid pieces (the characters) while the stack is used to rearrange them.
 int main(){
     Stack s1;
     s1.top=-1;
     push(&s1,'#');
-    char original[100]="A+(B-C)*D^2";
+    char original[100]="A^B^C+D-E*F/G";
     char post[100];
     int i=0,j=0;
     char symbol;
     while (original[i]!='\0')
     {
         symbol=original[i];
-        if (isalnum(symbol))
+        if (isalnum(symbol)) 
+            //we used isalnum() function to identify the alphanumeric digits in the expressions, as they dont really need re-arranging, they are the building blocks for a postfix expression.
             {
-                post[j++]=symbol;
+                post[j++]=symbol; //we directly append the symbols to the postfix because the operands themselves are not re-arranged, it is the micro expressions inside that rearrange in a postfix.
             }
             else if(symbol==')')
             {
