@@ -1,0 +1,83 @@
+
+#include <stdio.h>
+
+int top = -1;
+int stack[10];
+
+int check_overflow(int arr[])
+{
+	if (top >= 9)
+	{
+		return 1;
+	}
+	else {
+		return 0;
+		}
+}
+int check_underflow(int arr[])
+{
+	if (top == -1)
+	{
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
+}
+void push(int arr[], int element)
+{
+	if (check_overflow(arr) == 0)
+	{
+		top++;
+		arr[top] = element;
+		printf("Element %d pushed onto the stack\n", element);
+	}
+	else
+	{
+		printf("Stack Overflow condition. Cannot Push any element\n");
+	}
+ }
+int pop(int arr[])
+{
+	if (check_underflow(arr) == 0)
+	{
+		int value = arr[top];
+		top--;
+		printf("Element %d popped from the stack\n", value);
+		return value;
+	}
+	else
+	{
+		printf("Stack Underflow condition. Cannot Pop any element\n");
+		return -1;
+	}
+}
+
+void display(int arr[])
+{
+	if (top == -1)
+	{
+		printf("The stack is empty.");
+	}
+	else
+	{
+		printf("The elements from the top are: \n");
+		for (int i = top; i >= 0;i--)
+		{
+			printf("%d\n",arr[i]);
+		}
+	}
+}
+
+int main()
+{
+	push(stack, 5);
+	push(stack, 10);
+	push(stack, 15);
+	push(stack, 20);
+	pop(stack);
+	pop(stack);
+	display(stack);
+	return 0;
+}
