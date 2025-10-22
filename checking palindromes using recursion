@@ -1,0 +1,35 @@
+#include <stdio.h>
+#include <string.h>
+
+void reverse(char original[],int org_len, char rev[],int index)
+{
+    int i=org_len-1;
+    if (i<0)
+    {
+        rev[index]='\0';
+        return;
+    }
+    else
+    {
+       rev[index]=original[i];
+       reverse(original,org_len-1,rev,index+1);
+    }
+    
+}
+
+int main()
+{
+    char symbol[]="racecar";
+    char reversed[20];
+    int n=strlen(symbol);
+    reverse(symbol,n,reversed,0);
+    if (strcmp(symbol,reversed)==0)
+    {
+        printf("Yes the string is a palindrome.");
+    }
+    else
+    {
+        printf("The string is not a palidrome");
+    }
+    return 0;
+}
