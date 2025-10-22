@@ -1,0 +1,69 @@
+#include <stdio.h>
+#include <string.h>
+int top=-1;
+char stack[20];
+
+
+void push(char arr[],char element)
+{
+    if (top==19)
+    {
+        printf("Cannot push, the stack will overflow.");
+    }
+    else
+    {
+        arr[++top]=element;
+    }
+}
+
+char pop(char arr[])
+{
+    if (top==-1)
+    {
+        printf("Cannot pop, stack will underflow.");
+        return '\0';
+    }
+    else
+    {
+        char value=arr[top];
+        top--;
+        return value;
+    }
+}
+
+
+void ispalindrome(char original[], char arr[],char reversed[],int len)
+{   int j=0;
+    for (int i=0;i<len;i++)
+    {
+        push(arr,original[i]);
+    }
+    for (int i=top;i>=0;i--)
+    {
+        reversed[j]=pop(arr);
+        j++;
+    }
+    reversed[j]='\0';
+    
+    if (strcmp(original,reversed)==0)
+    {
+        printf("This is a palindrome. ");
+        
+    }
+    else
+    {
+        printf("Not a palindrome. ");
+    }
+}
+int main()
+{
+    char string1[]="racecar";
+    char string3[]="racecaa";
+    char string2[20];
+    char string4[20];
+    int n=strlen(string1);
+    ispalindrome(string1,stack,string2,n);
+    top=-1;
+    ispalindrome(string3,stack,string4,n);
+    return 0;
+}
