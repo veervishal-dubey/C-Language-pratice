@@ -2,15 +2,15 @@
 
 void towerofhanoi(int num, char source, char intermediate, char destination)
 {
-    if (num==1);
+    if (num==1)
     {
         printf("Move disk from %c to %c",source, destination);
     }
     else
     {
-        towerofhanoi(n-1, source, destination, intermediate);
+        towerofhanoi(num-1, source, destination, intermediate);
         printf("Move disk from %c to %c",source, destination);
-        towerofhanoi(n-1,intermediate,source,destination);
+        towerofhanoi(num-1,intermediate,source,destination);
     }
 }
 int main()
