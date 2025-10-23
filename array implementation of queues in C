@@ -1,0 +1,89 @@
+#include <stdio.h>
+
+int queue[10];
+int front=-1;
+int rear=-1;
+
+void enqueue(int arr[], int element)
+{
+    if (rear==9)
+    {
+        printf("Cannot enqueue. The queue will overflow");
+    }
+    else
+    {
+        if (front==-1)
+        {
+            front=0;
+        }
+        arr[++rear]=element;
+    }
+}
+
+int dequeue(int arr[])
+{
+    if (front==-1)
+    {
+        printf("Cannot dequeue. The queue will underflow.");
+        return -1;
+    }
+    else
+    {
+        int value=arr[front];
+        front++;
+        if (front>rear)
+        {
+            front=-1;
+            rear=-1;
+        }
+        return value;
+    }
+}
+
+int peek(int arr[])
+{
+    if (front==-1)
+    {
+        printf("The Queue is empty.\n");
+        return -1;
+    }
+    else
+    {
+        int value=arr[front];
+        return value;
+    }
+}
+
+void display(int arr[])
+{
+    if (front==-1)
+    {
+        printf("The Queue is empty.");
+    }
+    else
+    {   printf("Printing Queue from the front: \n");
+        for (int i=front;i<=rear;i++)
+        {
+            printf("%d\n",arr[i]);
+        }
+    }
+}
+
+int main()
+{
+    enqueue(queue,05);
+    enqueue(queue,10);
+    enqueue(queue,20);
+    enqueue(queue,30);
+    printf("%d\n",peek(queue));
+    display(queue);
+    dequeue(queue);
+    printf("%d\n",peek(queue));
+    display(queue);
+    dequeue(queue);
+    printf("%d\n",peek(queue));
+    display(queue);
+    return 0;
+    
+    
+}
