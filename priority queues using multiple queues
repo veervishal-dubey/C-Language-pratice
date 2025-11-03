@@ -1,0 +1,176 @@
+#include <stdio.h>
+
+int queue1[10];
+int queue2[10];
+int queue0[10];
+int front0=-1,rear0=-1,front1=-1,rear1=-1,front2=-1,rear2=-1;
+
+void enqueue(int arr[],int element)
+{
+    if (arr==queue0)
+    {
+        if (rear0==9)
+        {
+            printf("cannot enqueue. Queue 0 will overrflow.\n");
+        }
+        else if (front0==-1)
+        {
+            front0=0;
+            arr[++rear0]=element;
+        }
+        else
+        {
+            arr[++rear0]=element;
+        }
+    }
+    
+    else if (arr==queue1)
+    {
+        if (rear1==9)
+        {
+            printf("cannot enqueue. Queue 1 will overrflow.\n");
+        }
+        else if (front1==-1)
+        {
+            front1=0;
+            arr[++rear1]=element;
+        }
+       else
+        {
+            arr[++rear1]=element;
+        }
+    }
+    
+    else if (arr==queue2)
+    {
+        if (rear2==9)
+        {
+            printf("cannot enqueue. Queue 2 will overrflow.\n");
+        }
+        else if (front2==-1)
+        {
+            front2=0;
+            arr[++rear2]=element;
+        }
+       else
+        {
+            arr[++rear2]=element;
+        }
+    }
+}
+
+int dequeue()
+{
+    if (front0!=-1 && front0<=rear0)
+    {
+        int value = queue0[front0];
+        front0++;
+        return value;
+    }
+    else if (front1!=-1 && front1<=rear1)
+    {
+        int value = queue1[front1];
+        front1++;
+        return value;
+    }
+    else if (front2!=-1 && front2<=rear2)
+    {
+        int value = queue2[front2];
+        front2++;
+        return value;
+    }
+    else
+    {
+        printf("All Queues are empty. Cannot dequeue as the system will underflow.\n");
+        return -1;
+    }
+}
+
+void display()
+{
+    int i;
+
+    printf("Printing Queue 0 from the front:\n");
+    if (front0 == -1 || front0 > rear0)
+        printf("Queue 0 is empty.\n");
+    else {
+        for (i = front0; i <= rear0; i++)
+            printf("%d\t", queue0[i]);
+        printf("\n");
+    }
+
+    printf("Printing Queue 1 from the front:\n");
+    if (front1 == -1 || front1 > rear1)
+        printf("Queue 1 is empty.\n");
+    else {
+        for (i = front1; i <= rear1; i++)
+            printf("%d\t", queue1[i]);
+        printf("\n");
+    }
+
+    printf("Printing Queue 2 from the front:\n");
+    if (front2 == -1 || front2 > rear2)
+        printf("Queue 2 is empty.\n");
+    else {
+        for (i = front2; i <= rear2; i++)
+            printf("%d\t", queue2[i]);
+        printf("\n");
+    }
+}
+
+int main()
+{
+    int num;
+    int element,priority;
+    printf("Enter number of elements");
+    scanf("%d",&num);
+    for (int i=1;i<=num;i++)
+    {   printf("Enter the element and priority");
+        scanf("%d %d",&element,&priority);
+        if (priority==0)
+        {
+            enqueue(queue0,element);
+        }
+        else if (priority==1)
+        {
+            enqueue(queue1,element);
+        }
+        else if (priority==2)
+        {
+            enqueue(queue2,element);
+        }
+        else
+        {
+            printf("Invalid Priority.");
+        }
+    }
+    dequeue(); 
+    dequeue();
+    dequeue();
+    dequeue();
+    display();
+    return 0;
+}
+
+/*******************************************************************************
+ * Tracing the program:
+ * input format (number priority)
+ * (1 0): enqueues 1 to the queue0
+ * (2 0): enqueues 2 to the queue0
+ * (3 1): enqueues 3 to the queue1
+ * (4 2): enqueues 4 to the queue2
+ * (5 1): enqueues 5 to the queue1
+ * queue0={1,2}
+ * queue1={3,5}
+ * queue3={4}
+ * dequeue(): dequeues from queue0
+ * dequeue(): dequeues from queue0 
+ * queue0 is now empty
+ * dequeue(): dequeues from queue1
+ * dequeue(): dequeues from queue1
+ * queue1 is now empty
+ * display(): displays the following
+ * Queue 0 is empty
+ * Queue 1 is empty
+ * Queue 2 = {4}
+ * ****************************************************************************/
