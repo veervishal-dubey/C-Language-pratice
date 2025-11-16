@@ -11,6 +11,9 @@ struct node* insert_end(struct node*f, int data);
 void display(struct node *f);
 struct node* insert_before(struct node*f, int data, int target);
 struct node* insert_after(struct node*f, int data, int target);
+struct node* delete_begin(struct node *f);
+struct node* delete_end(struct node *f);
+struct node* delete_target(struct node *f, int target);
 
 int main(){
     struct node *first = NULL;
@@ -26,32 +29,35 @@ int main(){
 
     // Insert before a middle node
     first = insert_before(first, 99, 6); // List: 1 → 7 → 99 → 6 → 4
-    printf("\nAfter inserting 99 before 6:\n");
-    display(first);
+    
 
     // Insert before head
     first = insert_before(first, 88, 1); // List: 88 → 1 → 7 → 99 → 6 → 4
-    printf("\nAfter inserting 88 before 1 (head):\n");
-    display(first);
+  
 
     // Insert after a middle node
     first = insert_after(first, 55, 99); // List: 88 → 1 → 7 → 99 → 55 → 6 → 4
-    printf("\nAfter inserting 55 after 99:\n");
-    display(first);
+  
 
     // Insert after tail
     first = insert_after(first, 22, 4);  // List: 88 → 1 → 7 → 99 → 55 → 6 → 4 → 22
-    printf("\nAfter inserting 22 after 4 (tail):\n");
-    display(first);
+    
 
     // Insert before a non-existent value
     first = insert_before(first, 77, 100); // Should print "Element not found!"
-    printf("\nAttempt to insert 77 before 100 (not in list):\n");
-    display(first);
+    
 
     // Insert after a non-existent value
     first = insert_after(first, 66, 200); // Should print "Element not found!"
-    printf("\nAttempt to insert 66 after 200 (not in list):\n");
+    
+    display(first);
+    
+    first= delete_begin(first);
+    
+    first = delete_end(first);
+    
+    first = delete_target(first,55);
+    
     display(first);
 
     return 0;
@@ -172,4 +178,73 @@ struct node* insert_after(struct node*f, int data, int target){
         }
     }
     
+}
+
+struct node* delete_begin(struct node *f)
+{
+    if (f==NULL)
+    {
+        printf("The linked list is empty. Cannot delete.");
+        return f;
+    }
+    struct node * temp=f;
+    f=f->next;
+    
+    free(temp);
+    return f;
+}
+
+struct node* delete_end(struct node *f)
+{
+    if (f==NULL)
+    {
+        printf("The linked list is empty.");
+        return f;
+    }
+    else if(f->next==NULL)
+    {
+        free(f);
+        return NULL;
+    }
+    struct node *current=f->next, *previous=f;
+    while (current->next!=NULL)
+    {
+        previous=previous->next;
+        current=current->next;
+    }
+    previous->next=NULL;
+    free(current);
+    return f;
+}
+
+struct node* delete_target(struct node *f, int target)
+{
+    if (f==NULL)
+    {
+        printf("The linked list is empty.");
+        return f;
+    }
+    else if (f->info==target)
+    {   struct node *current=f;
+        f=f->next;
+        free(current);
+        return f;
+    }
+    struct node *current=f->next, *previous=f;
+    while (current!=NULL && current->info!=target)
+    {
+        previous=previous->next;
+        current=current->next;
+    }
+    if (current==NULL)
+    {
+        printf("Element not found in the list.");
+        return f;
+    }
+    else
+    {
+        previous->next=current->next;
+        free(current);
+        return f;
+    }
 }
