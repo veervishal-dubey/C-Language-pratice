@@ -9,18 +9,54 @@ struct node{
 struct node* insert_begin(struct node*f, int data);
 struct node* insert_end(struct node*f, int data);
 void display(struct node *f);
+struct node* insert_before(struct node*f, int data, int target);
+struct node* insert_after(struct node*f, int data, int target);
 
-int main()
-{
-    // intialize the linked list.
-    struct node *first;
-    first=NULL;
-    first=insert_end(first,6);
-    first=insert_begin(first,7);
-    first=insert_begin(first,1);
-    first=insert_end(first,4);
+int main(){
+    struct node *first = NULL;
+
+    // Initial insertions
+    first = insert_end(first, 6);       // List: 6
+    first = insert_begin(first, 7);     // List: 7 → 6
+    first = insert_begin(first, 1);     // List: 1 → 7 → 6
+    first = insert_end(first, 4);       // List: 1 → 7 → 6 → 4
+
+    printf("Initial list:\n");
     display(first);
+
+    // Insert before a middle node
+    first = insert_before(first, 99, 6); // List: 1 → 7 → 99 → 6 → 4
+    printf("\nAfter inserting 99 before 6:\n");
+    display(first);
+
+    // Insert before head
+    first = insert_before(first, 88, 1); // List: 88 → 1 → 7 → 99 → 6 → 4
+    printf("\nAfter inserting 88 before 1 (head):\n");
+    display(first);
+
+    // Insert after a middle node
+    first = insert_after(first, 55, 99); // List: 88 → 1 → 7 → 99 → 55 → 6 → 4
+    printf("\nAfter inserting 55 after 99:\n");
+    display(first);
+
+    // Insert after tail
+    first = insert_after(first, 22, 4);  // List: 88 → 1 → 7 → 99 → 55 → 6 → 4 → 22
+    printf("\nAfter inserting 22 after 4 (tail):\n");
+    display(first);
+
+    // Insert before a non-existent value
+    first = insert_before(first, 77, 100); // Should print "Element not found!"
+    printf("\nAttempt to insert 77 before 100 (not in list):\n");
+    display(first);
+
+    // Insert after a non-existent value
+    first = insert_after(first, 66, 200); // Should print "Element not found!"
+    printf("\nAttempt to insert 66 after 200 (not in list):\n");
+    display(first);
+
+    return 0;
 }
+
 
 struct node* insert_begin(struct node*f, int data)
 {
@@ -70,4 +106,70 @@ void display(struct node *f){
             current=current->next;
         }printf("NULL\n");
     }
+}
+
+struct node* insert_before(struct node*f, int data, int target){
+    if (f==NULL)
+    {
+        printf ("The list is empty.\n");
+        return f;
+    }
+    else{
+        struct node *previous, *current, *new;
+        new=(struct node *)malloc(sizeof(struct node));
+        new->info=data;
+        current=f->next;
+        previous=f;
+        if (f->info==target)
+        {
+            new->next=f;
+            f=new;
+            return f;
+        }
+        while (current!=NULL && current->info!=target)
+        {
+            previous=previous->next;
+            current=current->next;
+        }
+        if (current!=NULL)
+        {
+            previous->next=new;
+            new->next=current;
+            return f;
+        }
+        else{
+            printf("Element not found!");
+            return f;
+        }
+    }
+}
+
+struct node* insert_after(struct node*f, int data, int target){
+    if (f==NULL)
+    {
+        printf("The linked list is empty.\n");
+        return f;
+    }
+    else
+    {
+        struct node *new, *current=f;
+        new=(struct node *)malloc(sizeof(struct node));
+        new->info=data;
+        while (current!=NULL&&current->info!=target)
+        {
+            current=current->next;
+        }
+        if (current!=NULL)
+        {
+            new->next=current->next;
+            current->next=new;
+            return f;
+        }
+        else
+        {
+            printf("Element not found.\n");
+            return f;
+        }
+    }
+    
 }
