@@ -27,7 +27,7 @@ struct node* insert_end(struct node *f, int data)
     {
         return new;
     }
-    
+
     while (current->next != NULL)
     {
         current=current->next;
@@ -58,6 +58,9 @@ void display(struct node *f){
 
 struct node* concatenate(struct node *f1, struct node *f2){
     struct node * current=f1;
+    if (f1==NULL)
+        return f2;
+
     while (current->next!=NULL)
     {
         current=current->next;
@@ -68,36 +71,88 @@ struct node* concatenate(struct node *f1, struct node *f2){
 
 struct node * reverse(struct node *f)
 {
-    struct node * current, *sep;
-    sep=f;
-    sep->next=NULL;
-    
+    struct node * current, *newfront;
+    if (f==NULL)
+    {
+        printf("List is empty.");
+        return f;
+    }
+
+    newfront=f;
+    f=f->next;
+    newfront->next=NULL;
+
+    while (f!=NULL)
+    {
+        current=f;
+        f=f->next;
+        current->next=newfront;
+        newfront=current;
+    }
+    return newfront;
+}
+
+struct node* sort(struct node *f) {
+    if (f == NULL || f->next == NULL)
+        return f;
+
+    struct node *sorted = NULL;  
+    struct node *current = f;
+
+    while (current != NULL) {
+        struct node *next = current->next;
+
+       
+        if (sorted == NULL || current->info < sorted->info) {
+            current->next = sorted;
+            sorted = current;
+        } else {
+            struct node *temp = sorted;
+            while (temp->next != NULL && temp->next->info < current->info) {
+                temp = temp->next;
+            }
+            current->next = temp->next;
+            temp->next = current;
+        }
+
+        current = next;
+    }
+
+    return sorted;
 }
 
 int main(){
     struct node *first = NULL, *second=NULL;
 
     // Initial insertions
-    first = insert_end(first, 6);       
-    first = insert_begin(first, 7);     
-    first = insert_begin(first, 1);     
-    first = insert_end(first, 4);      
+    first = insert_end(first, 6);
+    first = insert_begin(first, 7);
+    first = insert_begin(first, 1);
+    first = insert_end(first, 4);
 
     printf("Initial list 1:\n");
     display(first);
 
 
-    second = insert_end(second, 12);       
-    second = insert_begin(second, 14);     
-    second = insert_begin(second, 2);     
+    second = insert_end(second, 12);
+    second = insert_begin(second, 14);
+    second = insert_begin(second, 2);
     second = insert_end(second, 8);
-    
+
     printf("Initial list 2:\n");
     display(second);
-    
+
+    printf("\n reversed list 2:\n");
+    second=reverse(second);
+    display(second);
+
+    printf("\n sorted list 1:\n");
+    first=sort(first);
+    display(first);
+
     first=concatenate(first,second);
     printf("Concatenated List\n");
     display(first);
-    
+
     return 0;
 }
