@@ -56,102 +56,111 @@ void display(struct node *f){
     }
 }
 
-struct node* concatenate(struct node *f1, struct node *f2){
-    struct node * current=f1;
-    if (f1==NULL)
-        return f2;
-
-    while (current->next!=NULL)
-    {
-        current=current->next;
-    }
-    current->next=f2;
-    return f1;
-}
-
 struct node * reverse(struct node *f)
-{
-    struct node * current, *newfront;
-    if (f==NULL)
-    {
-        printf("List is empty.");
+{   
+    // is function me, hum list ke end tak traverse karte hai or pointer adjust karte hai, using three pointers: 
+    // nextnode, jo ki agle linked node ko point kar rha hai, we use to store the next node. 
+    // current jo ki current node hai, iska pointer hum iske previous wale node me daale rahe hai 
+    // previous jo ki hum use kar rahe hai to track the previous node. 
+    // in the end, previous ko current node ki jagah increment kardo, current ko nextnode ki jagah increment kar do, or next node ko current->next me increment kardo
+    if (f==NULL || f->next==NULL)
         return f;
-    }
-
-    newfront=f;
-    f=f->next;
-    newfront->next=NULL;
-
-    while (f!=NULL)
+    else
     {
-        current=f;
-        f=f->next;
-        current->next=newfront;
-        newfront=current;
+        struct node * previous=NULL, * current=f, *nextnode=NULL;
+        while (current!=NULL)
+        {
+            nextnode=current->next; //yaha pe maine nextnode ko save kar liya hai, taaki increment me aasaani rahe
+            current->next=previous; //current node ke next pointer ko pichle element pe point karwa dia.
+            previous=current; // previous ko current me increment kar dia
+            current=nextnode; // finally current ko agle pe increment kar dia.
+        }
+        struct node * newfront=previous;
+        return newfront;
     }
-    return newfront;
 }
 
-struct node* sort(struct node *f) {
-    if (f == NULL || f->next == NULL)
+struct node* sort(struct node* f) {
+    // current is the node jisko insert kar rahe hai, traversal_node is used to walk through the list, previous is used to keep track of the previous traversed node
+    // we insert current in between traversal_node and previous node. 
+    if (f == NULL || f->next == NULL) {
         return f;
+    }
 
-    struct node *sorted = NULL;  
+    struct node *sorted_head = NULL;
     struct node *current = f;
 
     while (current != NULL) {
-        struct node *next = current->next;
+        struct node *nextnode = current->next;
 
-       
-        if (sorted == NULL || current->info < sorted->info) {
-            current->next = sorted;
-            sorted = current;
+        if (sorted_head == NULL || current->info < sorted_head->info) { //agar element kam hai, to phir insert at the start.
+            current->next = sorted_head;
+            sorted_head = current;
         } else {
-            struct node *temp = sorted;
-            while (temp->next != NULL && temp->next->info < current->info) {
-                temp = temp->next;
+            struct node *traversal_node = sorted_head;
+            struct node *previous = NULL;
+
+            while (traversal_node != NULL && traversal_node->info < current->info) { //traverse to find sahi position
+                previous = traversal_node;
+                traversal_node = traversal_node->next;
             }
-            current->next = temp->next;
-            temp->next = current;
+
+            if (previous == NULL) { 
+                // matlab koi bhi smaller element nahi mila. you insert at the start. 
+                current->next = sorted_head;
+                sorted_head = current;
+            } else {
+                // Insert between previous and traversal_node
+                previous->next = current;
+                current->next = traversal_node;
+            }
         }
 
-        current = next;
+        current = nextnode;
     }
 
-    return sorted;
+    return sorted_head;
+}
+
+struct node * concatenate(struct node * f1, struct node *f2)
+{   if (f1==NULL)
+        return f2;
+    struct node * current=f1;
+    while (current->next!=NULL)
+        current=current->next;
+    current->next=f2;
+    return f1;
 }
 
 int main(){
     struct node *first = NULL, *second=NULL;
 
     // Initial insertions
-    first = insert_end(first, 6);
-    first = insert_begin(first, 7);
-    first = insert_begin(first, 1);
-    first = insert_end(first, 4);
+    first = insert_end(first, 6);       // List: 6
+    first = insert_begin(first, 7);     // List: 7 → 6
+    first = insert_begin(first, 1);     // List: 1 → 7 → 6
+    first = insert_end(first, 4);       // List: 1 → 7 → 6 → 4
 
-    printf("Initial list 1:\n");
+    printf("Initial list:\n");
+    
+    display(first);
+    
+
+    first=reverse(first);
+
     display(first);
 
-
-    second = insert_end(second, 12);
-    second = insert_begin(second, 14);
-    second = insert_begin(second, 2);
-    second = insert_end(second, 8);
-
-    printf("Initial list 2:\n");
-    display(second);
-
-    printf("\n reversed list 2:\n");
-    second=reverse(second);
-    display(second);
-
-    printf("\n sorted list 1:\n");
     first=sort(first);
+
     display(first);
+
+    second=insert_end(second,12);
+    second=insert_begin(second,14);
+    second=insert_begin(second,2);
+    second=insert_end(second,8);
 
     first=concatenate(first,second);
-    printf("Concatenated List\n");
+
     display(first);
 
     return 0;
