@@ -1,0 +1,113 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node{
+    int info;
+    struct node * next;
+};
+struct node *stack=NULL, *queue=NULL;
+struct node* push(struct node *f, int data)
+{
+    struct node * current, * new;
+    current=f;
+    new=(struct node *)malloc(sizeof(struct node));
+    new->info=data;
+    new->next=NULL;
+    if (f==NULL)
+    {
+        return new;
+    }
+
+    while (current->next != NULL)
+    {
+        current=current->next;
+    }
+    current->next=new;
+    return f;
+}
+//assume that the last head is the top and rear pointer, all insertions happen here
+
+struct node* dequeue(struct node *f)
+{
+    if (f==NULL)
+    {
+        printf("The queue is empty. Cannot delete.");
+        return f;
+    }
+    struct node * temp=f;
+    f=f->next;
+
+    free(temp);
+    return f;
+}
+//since the head is the front, the deletions happen here.
+
+struct node* pop(struct node *f)
+{
+    if (f==NULL)
+    {
+        printf("The stack is empty. Deletion will underflow.");
+        return f;
+    }
+    else if(f->next==NULL)
+    {
+        free(f);
+        return NULL;
+    }
+    struct node *current=f->next, *previous=f;
+    while (current->next!=NULL)
+    {
+        previous=previous->next;
+        current=current->next;
+    }
+    previous->next=NULL;
+    free(current);
+    return f;
+}
+//since the head is the rear, the end node is the front and it will be the dequeue.
+
+void display(struct node *f){
+    struct node * current=f;
+    if (f==NULL)
+    {
+        printf("Data structure is empty.");
+    }
+    else if (f->next==NULL)
+    {
+        printf("%d",f->info);
+    }
+    else
+    {   if (f==stack)
+            printf("printing stack from bottom to top.\n");
+        else if (f==queue)
+            printf("printing queue from front to rear.\n");
+        while (current!=NULL)
+        {
+            printf("%d\n",current->info);
+            current=current->next;
+        }printf("----------------------------\n");
+    }
+}
+
+
+int main()
+{
+
+    stack=push(stack, 1);
+    stack=push(stack,2);
+    stack=push(stack,3);
+    stack=push(stack,4);
+    display(stack);
+    queue=push(queue, 10);
+    queue=push(queue, 20);
+    queue=push(queue, 30);
+    queue=push(queue,40);
+    display(queue);
+    stack=pop(stack);
+    queue=dequeue(queue);
+    display(stack);
+    display(queue);
+    return 0;
+}
+
+
